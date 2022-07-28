@@ -1,0 +1,28 @@
+{
+  "name": "unnamed",
+  "description": "",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=16.x"
+  },
+  "scripts": {
+    "build": "esbuild --platform=node --bundle --outdir=dist src/pre.js",
+    "format": "dprint fmt",
+    "lint": "standard && dprint check"
+  },
+  "dependencies": {
+    "@actions/core": "^1.9.0",
+    "@actions/github": "^5.0.3",
+    "@slack/web-api": "^6.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.6.2",
+    "dprint": "^0.30.3",
+    "esbuild": "^0.14.50",
+    "standard": "^17.0.0",
+    "typescript": "^4.7.4"
+  }
+}

@@ -1,0 +1,12 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    name: First comes the tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo 'hello'
