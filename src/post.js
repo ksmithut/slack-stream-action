@@ -32,7 +32,7 @@ export async function run () {
       channel: channelId,
       ts: slackTs,
       text: context.workflow,
-      blocks: [getInfoBlock(context), mainBlock]
+      blocks: [getInfoBlock(context), mainBlock, { type: 'divider' }]
     }),
     slackThreadTs &&
     slack.chat.update({

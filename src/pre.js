@@ -39,7 +39,7 @@ export async function run () {
         channel: channelId,
         ts: slackTs,
         text: context.workflow,
-        blocks: [getInfoBlock(context), mainBlock]
+        blocks: [getInfoBlock(context), mainBlock, { type: 'divider' }]
       }),
       slack.chat.postMessage({
         channel: channelId,
@@ -63,7 +63,7 @@ export async function run () {
       channel: channelId,
       text: context.workflow,
       unfurl_links: false,
-      blocks: [getInfoBlock(context), mainBlock]
+      blocks: [getInfoBlock(context), mainBlock, { type: 'divider' }]
     })
     if (!mainMessage.ts) {
       throw new Error('Did not get slack ts')

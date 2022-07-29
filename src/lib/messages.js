@@ -21,8 +21,8 @@ export async function getJobsStatusBlock (octokit, context) {
     text: { type: 'mrkdwn', text: fullJobsText }
   }
   const job = jobs.at(-1)
+  core.info(JSON.stringify({ jobs, context, env: process.env }, null, 2))
   if (!job) {
-    core.info(JSON.stringify({ jobs, context, env: process.env }, null, 2))
     throw new Error('could not find job')
   }
   const threadBlock = {
@@ -50,7 +50,7 @@ export async function getJobsStatusBlock (octokit, context) {
 function getJobText (job) {
   const emoji = getJobEmoji(job)
   const completionTime = getCompletionTime(job)
-  const suffix = completionTime ? ` ${completionTime}` : ''
+  const suffix = completionTime ? ` (${completionTime})` : ''
   const text = `:${emoji}: ${job.name}${suffix}`
   return job.html_url ? `<${job.html_url}|${text}>` : text
 }
