@@ -37,23 +37,17 @@ export async function run () {
         )
       }
     )
-    const info = [{
+    const repoName = `${context.repo.owner}/${context.repo.repo}`
+    const repoBaseURL = `https://github.com/${repoName}`
+    const info = [{ label: 'Repo', url: repoBaseURL, value: repoName }, {
+      label: 'Workflow',
+      url: `${repoBaseURL}/actions/runs/${context.runId}`,
+      value: context.workflow
+    }, {
       label: 'Author',
       url: `https://github.com/${context.actor}`,
       value: context.actor
-    }, {
-      label: 'Workflow Run',
-      url:
-        `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-      value: context.workflow
     }]
-    if (context.payload.repository?.html_url) {
-      info.push({
-        label: 'Repo',
-        url: context.payload.repository.html_url,
-        value: context.payload.repository.name
-      })
-    }
     if (context.payload.pull_request?.html_url) {
       info.push({
         label: 'PR',
@@ -71,18 +65,19 @@ export async function run () {
         type: 'context',
         elements: info.map(item => ({
           type: 'mrkdwn',
-          text: `*${item.label}*   \n<${item.url}|${item.value}>`
+          text: `*${item.label}*     \n<${item.url}|${item.value}>     `
         }))
       }, { block_id: 'divider', type: 'divider' }]
     })
     if (!response.ts) {
       throw new Error('Did not get slack ts')
     }
-    core.saveState('slack-ts', response.ts)
-    console.log(JSON.stringify(response, null, 2))
+    core.saveState('slack-ts', [channelId, response.ts].join(' '))
+    console.log(JSON.stringify(jobs, null, 2))
   } else {
     throw new Error(`missing input slack-ts or channel-id`)
   }
+  core.saveState('start', Date.now())
 
   // await octokit.rest.actions.getWorkflow({
   //   ...context.repo,
