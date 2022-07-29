@@ -1,16 +1,18 @@
-"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function __require() {
+var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+}) : x)(function(x) {
+  if (typeof require !== "undefined")
+    return require.apply(this, arguments);
+  throw new Error('Dynamic require of "' + x + '" is not supported');
+});
+var __commonJS = (cb, mod) => function __require2() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
@@ -24,7 +26,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // node_modules/@actions/core/lib/utils.js
 var require_utils = __commonJS({
@@ -92,7 +93,7 @@ var require_command = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.issue = exports.issueCommand = void 0;
-    var os = __importStar(require("os"));
+    var os = __importStar(__require("os"));
     var utils_1 = require_utils();
     function issueCommand(command, properties, message) {
       const cmd = new Command(command, properties, message);
@@ -179,8 +180,8 @@ var require_file_command = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.issueCommand = void 0;
-    var fs = __importStar(require("fs"));
-    var os = __importStar(require("os"));
+    var fs = __importStar(__require("fs"));
+    var os = __importStar(__require("os"));
     var utils_1 = require_utils();
     function issueCommand(command, message) {
       const filePath = process.env[`GITHUB_${command}`];
@@ -258,13 +259,13 @@ var require_proxy = __commonJS({
 var require_tunnel = __commonJS({
   "node_modules/tunnel/lib/tunnel.js"(exports) {
     "use strict";
-    var net = require("net");
-    var tls = require("tls");
-    var http = require("http");
-    var https = require("https");
-    var events = require("events");
-    var assert = require("assert");
-    var util2 = require("util");
+    var net = __require("net");
+    var tls = __require("tls");
+    var http = __require("http");
+    var https = __require("https");
+    var events = __require("events");
+    var assert = __require("assert");
+    var util2 = __require("util");
     exports.httpOverHttp = httpOverHttp;
     exports.httpsOverHttp = httpsOverHttp;
     exports.httpOverHttps = httpOverHttps;
@@ -486,8 +487,8 @@ var require_tunnel = __commonJS({
 
 // node_modules/tunnel/index.js
 var require_tunnel2 = __commonJS({
-  "node_modules/tunnel/index.js"(exports, module2) {
-    module2.exports = require_tunnel();
+  "node_modules/tunnel/index.js"(exports, module) {
+    module.exports = require_tunnel();
   }
 });
 
@@ -552,8 +553,8 @@ var require_lib = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
-    var http = __importStar(require("http"));
-    var https = __importStar(require("https"));
+    var http = __importStar(__require("http"));
+    var https = __importStar(__require("https"));
     var pm = __importStar(require_proxy());
     var tunnel = __importStar(require_tunnel2());
     var HttpCodes;
@@ -1271,8 +1272,8 @@ var require_summary = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
-    var os_1 = require("os");
-    var fs_1 = require("fs");
+    var os_1 = __require("os");
+    var fs_1 = __require("fs");
     var { access, appendFile, writeFile } = fs_1.promises;
     exports.SUMMARY_ENV_VAR = "GITHUB_STEP_SUMMARY";
     exports.SUMMARY_DOCS_URL = "https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary";
@@ -1437,7 +1438,7 @@ var require_path_utils = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = void 0;
-    var path = __importStar(require("path"));
+    var path = __importStar(__require("path"));
     function toPosixPath(pth) {
       return pth.replace(/[\\]/g, "/");
     }
@@ -1517,8 +1518,8 @@ var require_core = __commonJS({
     var command_1 = require_command();
     var file_command_1 = require_file_command();
     var utils_1 = require_utils();
-    var os = __importStar(require("os"));
-    var path = __importStar(require("path"));
+    var os = __importStar(__require("os"));
+    var path = __importStar(__require("path"));
     var oidc_utils_1 = require_oidc_utils();
     var ExitCode;
     (function(ExitCode2) {
@@ -1675,30 +1676,24 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 });
 
 // src/post.js
-var post_exports = {};
-__export(post_exports, {
-  run: () => run
-});
-module.exports = __toCommonJS(post_exports);
 var core = __toESM(require_core(), 1);
-var import_node_process = __toESM(require("node:process"), 1);
-var import_node_util = __toESM(require("node:util"), 1);
+import process2 from "node:process";
+import util from "node:util";
 async function run() {
-  const slackToken = core.getInput("slack-bot-token") || import_node_process.default.env.SLACK_BOT_TOKEN;
-  const channelId = core.getInput("slack-channel-id") || import_node_process.default.env.SLACK_CHANNEL_ID;
+  const slackToken = core.getInput("slack-bot-token") || process2.env.SLACK_BOT_TOKEN;
+  const channelId = core.getInput("slack-channel-id") || process2.env.SLACK_CHANNEL_ID;
   const slackTs = core.getInput("slack-ts");
   const githubToken = core.getInput("github-token", { required: true });
   const jobStatus = core.getInput("status", { required: true });
   core.notice(jobStatus);
 }
 run().catch((error) => {
-  core.info(import_node_util.default.format(error));
+  core.info(util.format(error));
   if (error instanceof Error)
     core.setFailed(error.message);
   else
     core.setFailed("Unhandled error");
 });
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
+export {
   run
-});
+};
