@@ -11,7 +11,7 @@
   "scripts": {
     "clean": "node -e 'fs.promises.rm(\"dist\",{recursive:true}).catch(()=>{})'",
     "prebuild": "npm run clean",
-    "build": "esbuild --format=esm --platform=node --bundle --splitting --outdir=dist src/pre.js src/post.js src/main.js",
+    "build": "esbuild --format=esm --platform=node --bundle --splitting --minify --outdir=dist src/pre.js src/post.js src/main.js",
     "format": "dprint fmt",
     "lint": "standard && dprint check"
   },
