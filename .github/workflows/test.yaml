@@ -23,8 +23,8 @@ jobs:
       - test
     runs-on: ubuntu-latest
     env:
-      SLACK_TS: ${{ jobs.test.outputs.slack-ts }}
+      SLACK_TS: ${{ needs.test.outputs.slack-ts }}
     steps:
       - uses: ksmithut/slack-stream-action@main
         with:
-          slack-ts: ${{ jobs.test.outputs.slack-ts }}
+          slack-ts: ${{ needs.test.outputs.slack-ts }}
