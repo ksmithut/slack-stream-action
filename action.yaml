@@ -21,7 +21,7 @@ inputs:
     default: ${{ job.status }}
 outputs:
   slack-ts:
-
+    description: The slack ts used from previous jobs
 runs:
   using: 'node16'
   pre: 'dist/pre.js'
