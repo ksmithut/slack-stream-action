@@ -27,7 +27,6 @@ export async function run () {
       attempt_number: Number.parseInt(process.env.GITHUB_RUN_ATTEMPT || '1', 10)
     }
   )
-  core.info(JSON.stringify(workflowResponse.data, null, 2))
   core.info(JSON.stringify(jobs, null, 2))
 
   // await octokit.rest.actions.getWorkflow({
