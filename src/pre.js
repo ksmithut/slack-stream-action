@@ -35,7 +35,7 @@ export async function run () {
     }
   )
   core.info(JSON.stringify(workflowResponse.data, null, 2))
-  core.info(JSON.stringify(jobs))
+  core.info(JSON.stringify(jobs, null, 2))
 
   // await octokit.rest.actions.getWorkflow({
   //   ...context.repo,
