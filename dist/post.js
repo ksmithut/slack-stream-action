@@ -3,11 +3,7 @@ import {
   require_core,
   require_dist,
   require_github
-} from "./chunk-I52GNN4J.js";
-
-// src/lib/patch-require.js
-import { createRequire } from "node:module";
-global.require = createRequire(import.meta.url);
+} from "./chunk-N5EUFWI5.js";
 
 // src/post.js
 var core = __toESM(require_core(), 1);

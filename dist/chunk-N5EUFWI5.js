@@ -22141,6 +22141,10 @@ var require_dist4 = __commonJS({
   }
 });
 
+// src/lib/patch-require.js
+import { createRequire } from "node:module";
+global.require = createRequire(import.meta.url);
+
 export {
   __toESM,
   require_core,
