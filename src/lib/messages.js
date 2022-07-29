@@ -1,3 +1,5 @@
+import * as core from '@actions/core'
+
 /**
  * @param {ReturnType<import('@actions/github').getOctokit>} octokit
  * @param {typeof import('@actions/github').context} context
@@ -19,7 +21,10 @@ export async function getJobsStatusBlock (octokit, context) {
     text: { type: 'mrkdwn', text: fullJobsText }
   }
   const job = jobs.find(job => job.node_id === context.job)
-  if (!job) throw new Error('could not find job')
+  if (!job) {
+    core.info(JSON.stringify({ jobs, context }, null, 2))
+    throw new Error('could not find job')
+  }
   const threadBlock = {
     block_id: job.node_id,
     type: 'section',
