@@ -40,6 +40,11 @@ export async function run () {
       label: 'Author',
       url: `https://github.com/${context.actor}`,
       value: context.actor
+    }, {
+      label: 'Workflow Run',
+      url:
+        `https://github.com/${context.repo.owner}/${context.repo.repo}/runs/${context.runId}`,
+      value: context.action
     }]
     if (context.payload.repository?.html_url) {
       info.push({
@@ -56,6 +61,18 @@ export async function run () {
       })
     }
     console.log(JSON.stringify(context, null, 2))
+    const response = await slack.chat.postMessage({
+      channel: channelId,
+      blocks: [{
+        block_id: 'info',
+        type: 'context',
+        elements: info.map(item => ({
+          type: 'mrkdwn',
+          text: `*${item.label}*\n<${item.url}|${item.label}>`
+        }))
+      }]
+    })
+    console.log(JSON.stringify(response, null, 2))
   } else {
     throw new Error(`missing input slack-ts or channel-id`)
   }
