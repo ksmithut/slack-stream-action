@@ -1,11 +1,10 @@
+import './lib/patch-require.js'
+// dprint-ignore
 import * as core from '@actions/core'
 import { context, getOctokit } from '@actions/github'
 import { WebClient } from '@slack/web-api'
-import { createRequire } from 'node:module'
 import process from 'node:process'
 import util from 'node:util'
-
-globalThis.require = createRequire(import.meta.url)
 
 export async function run () {
   const slackToken = core.getInput('slack-bot-token') ||

@@ -1,3 +1,4 @@
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 name: 'Slack Stream Action'
 description: 'Github Action to provide a single message that gets updated with the github workflow run status'
 author: 'ksmithut'
