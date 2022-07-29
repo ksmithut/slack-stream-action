@@ -52,24 +52,20 @@ export async function run () {
       channel: channelId,
       text: `${context.workflow}`,
       unfurl_links: false,
-      attachments: [{
-        preview: { can_remove: false, type: 'text' },
-        color: '#d4ad3c',
-        blocks: [{
-          block_id: 'info',
-          type: 'context',
-          elements: info.map(item => ({
-            type: 'mrkdwn',
-            text: `*${item.label}*     \n<${item.url}|${item.value}>     `
-          }))
-        }, {
-          block_id: 'jobs',
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: await getJobsStatusText(octokit, context)
-          }
-        }]
+      blocks: [{
+        block_id: 'info',
+        type: 'context',
+        elements: info.map(item => ({
+          type: 'mrkdwn',
+          text: `*${item.label}*     \n<${item.url}|${item.value}>     `
+        }))
+      }, {
+        block_id: 'jobs',
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: await getJobsStatusText(octokit, context)
+        }
       }]
     })
     if (!response.ts) {
