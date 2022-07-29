@@ -5,7 +5,6 @@ on:
       - main
 env:
   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-  SLACK_TS: ${{ jobs.test.outputs.slack-ts }}
 
 jobs:
   test:
@@ -23,5 +22,9 @@ jobs:
     needs:
       - test
     runs-on: ubuntu-latest
+    env:
+      SLACK_TS: ${{ jobs.test.outputs.slack-ts }}
     steps:
       - uses: ksmithut/slack-stream-action@main
+        with:
+          slack-ts: ${{ jobs.test.outputs.slack-ts }}
