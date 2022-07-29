@@ -12,7 +12,7 @@ jobs:
       slack-ts: ${{ steps.slack.outputs.slack-ts }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - id: slack
         uses: ksmithut/slack-stream-action@main
+      - uses: actions/checkout@v3
       - run: echo 'hello'

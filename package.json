@@ -9,7 +9,7 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "build": "esbuild --platform=node --bundle --outdir=dist src/pre.js src/post.js",
+    "build": "esbuild --platform=node --bundle --outdir=dist src/pre.js src/post.js src/main.js",
     "format": "dprint fmt",
     "lint": "standard && dprint check"
   },
