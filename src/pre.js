@@ -60,15 +60,16 @@ export async function run () {
         value: `#${context.payload.pull_request.number}`
       })
     }
-    console.log(JSON.stringify(context, null, 2))
+    // console.log(JSON.stringify(context, null, 2))
     const response = await slack.chat.postMessage({
       channel: channelId,
+      unfurl_links: false,
       blocks: [{
         block_id: 'info',
         type: 'context',
         elements: info.map(item => ({
           type: 'mrkdwn',
-          text: `*${item.label}*\n<${item.url}|${item.label}>`
+          text: `*${item.label}*\n<${item.url}|${item.value}>`
         }))
       }]
     })
