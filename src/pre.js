@@ -5,6 +5,7 @@ import { context, getOctokit } from '@actions/github'
 import { WebClient } from '@slack/web-api'
 import process from 'node:process'
 import util from 'node:util'
+import { getJobsStatusText } from './lib/jobs.js'
 
 export async function run () {
   const slackToken = core.getInput('slack-bot-token') ||
@@ -28,29 +29,6 @@ export async function run () {
     core.saveState('slack-ts', slackTs)
   } else if (channelId) {
     core.info(JSON.stringify({ context, env: process.env }, null, 2))
-    // const job = await octokit.rest.actions.getJobForWorkflowRun({
-    //   ...context.repo,
-    //   job_id: context.
-    // })
-    const jobs = await octokit.paginate(
-      octokit.rest.actions.listJobsForWorkflowRunAttempt,
-      {
-        ...context.repo,
-        run_id: context.runId,
-        attempt_number: Number.parseInt(
-          process.env.GITHUB_RUN_ATTEMPT || '1',
-          10
-        )
-      }
-    )
-    const jobs2 = await octokit.paginate(
-      octokit.rest.actions.listJobsForWorkflowRun,
-      {
-        ...context.repo,
-        run_id: context.runId
-      }
-    )
-    console.log(JSON.stringify(jobs2, null, 2))
     const repoName = `${context.repo.owner}/${context.repo.repo}`
     const repoBaseURL = `https://github.com/${repoName}`
     const info = [{ label: 'Repo', url: repoBaseURL, value: repoName }, {
@@ -75,6 +53,7 @@ export async function run () {
       text: `${context.workflow}`,
       unfurl_links: false,
       attachments: [{
+        preview: { can_remove: false, type: 'text' },
         color: '#d4ad3c',
         blocks: [{
           block_id: 'info',
@@ -88,12 +67,7 @@ export async function run () {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: jobs
-              .map(job => {
-                job.status
-                return `<${job.html_url}|:tada: ${job.name}>`
-              })
-              .join(' --> ')
+            text: await getJobsStatusText(octokit, context)
           }
         }]
       }]
@@ -102,7 +76,6 @@ export async function run () {
       throw new Error('Did not get slack ts')
     }
     core.saveState('slack-ts', response.ts)
-    // console.log(JSON.stringify(jobs, null, 2))
   } else {
     throw new Error(`missing input slack-ts or channel-id`)
   }
