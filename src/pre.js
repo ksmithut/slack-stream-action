@@ -9,6 +9,7 @@ import util from 'node:util'
 export async function run () {
   core.info(`slack-ts: ${core.getInput('slack-ts')}`)
   core.setOutput('slack-ts', 'pre')
+  core.saveState('testing', 'test1')
   // const slackToken = core.getInput('slack-bot-token') ||
   //   process.env.SLACK_BOT_TOKEN
   // const channelId = core.getInput('slack-channel-id') ||
