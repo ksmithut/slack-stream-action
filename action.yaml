@@ -1,10 +1,10 @@
 name: 'Slack Stream Action'
 description: 'Github Action to provide a single message that gets updated with the github workflow run status'
 author: 'ksmithut'
+branding:
+  icon: alert-circle
+  color: red
 inputs:
-  slack-bot-token:
-    description: The Slack token to use to post messages
-    required: false
   slack-channel-id:
     description: The channel id of the channel to post messages to
     required: false
@@ -19,6 +19,9 @@ inputs:
     description: The job status
     required: true
     default: ${{ job.status }}
+outputs:
+  slack-ts:
+
 runs:
   using: 'node16'
   pre: 'dist/pre.js'

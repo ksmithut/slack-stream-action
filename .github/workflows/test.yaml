@@ -3,10 +3,16 @@ on:
   push:
     branches:
       - master
+env:
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 jobs:
   test:
     name: First comes the tests
+    outputs:
+      slack-ts: ${{ steps.slack.outputs.slack-ts }}
     runs-on: ubuntu-latest
     steps:
+      - id: slack
+        uses: '.'
       - uses: actions/checkout@v3
       - run: echo 'hello'
