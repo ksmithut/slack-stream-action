@@ -13,7 +13,6 @@ export async function run () {
   const slackTs = core.getInput('slack-ts')
   const channelId = core.getInput('slack-channel-id') ||
     process.env.SLACK_CHANNEL_ID
-  const jobStatus = core.getInput('status', { required: true })
   const githubToken = core.getInput('github-token', { required: true })
 
   const octokit = getOctokit(githubToken)
