@@ -26,7 +26,16 @@ export async function run () {
     path: runResponse.data.path,
     ref: context.ref
   })
+  const jobs = await octokit.paginate(
+    octokit.rest.actions.listJobsForWorkflowRunAttempt,
+    {
+      ...context.repo,
+      run_id: context.runId,
+      attempt_number: Number.parseInt(process.env.GITHUB_RUN_ATTEMPT || '1', 10)
+    }
+  )
   core.info(JSON.stringify(workflowResponse.data, null, 2))
+  core.info(JSON.stringify(jobs))
 
   // await octokit.rest.actions.getWorkflow({
   //   ...context.repo,
@@ -35,7 +44,5 @@ export async function run () {
 }
 
 run().catch(error => {
-  core.info(util.format(error))
-  if (error instanceof Error) core.setFailed(error.message)
-  else core.setFailed('Unhandled error')
+  core.error(util.format(error))
 })
