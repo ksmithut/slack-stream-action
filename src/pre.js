@@ -24,6 +24,7 @@ export async function run () {
   }
 
   if (slackTs) {
+    core.saveState('slack-ts', slackTs)
   } else if (channelId) {
     const jobs = await octokit.paginate(
       octokit.rest.actions.listJobsForWorkflowRunAttempt,
@@ -43,8 +44,8 @@ export async function run () {
     }, {
       label: 'Workflow Run',
       url:
-        `https://github.com/${context.repo.owner}/${context.repo.repo}/runs/${context.runId}`,
-      value: context.action
+        `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+      value: context.workflow
     }]
     if (context.payload.repository?.html_url) {
       info.push({
@@ -63,16 +64,21 @@ export async function run () {
     // console.log(JSON.stringify(context, null, 2))
     const response = await slack.chat.postMessage({
       channel: channelId,
+      text: `${context.workflow}`,
       unfurl_links: false,
       blocks: [{
         block_id: 'info',
         type: 'context',
         elements: info.map(item => ({
           type: 'mrkdwn',
-          text: `*${item.label}*\n<${item.url}|${item.value}>`
+          text: `*${item.label}*   \n<${item.url}|${item.value}>`
         }))
-      }]
+      }, { block_id: 'divider', type: 'divider' }]
     })
+    if (!response.ts) {
+      throw new Error('Did not get slack ts')
+    }
+    core.saveState('slack-ts', response.ts)
     console.log(JSON.stringify(response, null, 2))
   } else {
     throw new Error(`missing input slack-ts or channel-id`)
@@ -85,5 +91,5 @@ export async function run () {
 }
 
 run().catch(error => {
-  core.error(util.format(error))
+  core.error(`ksmithut/slack-stream-action: ${util.format(error)}`)
 })
