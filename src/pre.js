@@ -10,7 +10,8 @@ export async function run () {
   const slackToken = core.getInput('slack-bot-token') ||
     process.env.SLACK_BOT_TOKEN
   const slackTs = core.getInput('slack-ts')
-  const channelId = core.getInput('slack-channel-id')
+  const channelId = core.getInput('slack-channel-id') ||
+    process.env.SLACK_CHANNEL_ID
   const jobStatus = core.getInput('status', { required: true })
   const githubToken = core.getInput('github-token', { required: true })
 
@@ -26,6 +27,11 @@ export async function run () {
   if (slackTs) {
     core.saveState('slack-ts', slackTs)
   } else if (channelId) {
+    core.info(JSON.stringify({ context, env: process.env }, null, 2))
+    // const job = await octokit.rest.actions.getJobForWorkflowRun({
+    //   ...context.repo,
+    //   job_id: context.
+    // })
     const jobs = await octokit.paginate(
       octokit.rest.actions.listJobsForWorkflowRunAttempt,
       {
@@ -60,19 +66,22 @@ export async function run () {
       channel: channelId,
       text: `${context.workflow}`,
       unfurl_links: false,
-      blocks: [{
-        block_id: 'info',
-        type: 'context',
-        elements: info.map(item => ({
-          type: 'mrkdwn',
-          text: `*${item.label}*     \n<${item.url}|${item.value}>     `
-        }))
-      }, { block_id: 'divider', type: 'divider' }]
+      attachments: [{
+        color: '#d4ad3c',
+        blocks: [{
+          block_id: 'info',
+          type: 'context',
+          elements: info.map(item => ({
+            type: 'mrkdwn',
+            text: `*${item.label}*     \n<${item.url}|${item.value}>     `
+          }))
+        }]
+      }]
     })
     if (!response.ts) {
       throw new Error('Did not get slack ts')
     }
-    core.saveState('slack-ts', [channelId, response.ts].join(' '))
+    core.saveState('slack-ts', response.ts)
     console.log(JSON.stringify(jobs, null, 2))
   } else {
     throw new Error(`missing input slack-ts or channel-id`)

@@ -5,6 +5,7 @@ on:
       - main
 env:
   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
 
 jobs:
   test:
@@ -15,15 +16,11 @@ jobs:
     steps:
       - id: slack
         uses: ksmithut/slack-stream-action@main
-        with:
-          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
       - uses: actions/checkout@v3
   build:
     needs:
       - test
     runs-on: ubuntu-latest
-    env:
-      SLACK_TS: ${{ needs.test.outputs.slack-ts }}
     steps:
       - uses: ksmithut/slack-stream-action@main
         with:
