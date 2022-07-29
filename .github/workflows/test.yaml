@@ -14,4 +14,6 @@ jobs:
     steps:
       - id: slack
         uses: ksmithut/slack-stream-action@main
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
       - uses: actions/checkout@v3
