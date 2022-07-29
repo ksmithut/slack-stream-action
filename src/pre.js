@@ -5,7 +5,7 @@ import { context, getOctokit } from '@actions/github'
 import { WebClient } from '@slack/web-api'
 import process from 'node:process'
 import util from 'node:util'
-import { getJobsStatusText } from './lib/jobs.js'
+import { getInfoBlock, getJobsStatusBlock } from './lib/messages.js'
 
 export async function run () {
   const slackToken = core.getInput('slack-bot-token') ||
@@ -24,63 +24,64 @@ export async function run () {
       'Missing input slack-bot-token or environment variable SLACK_BOT_TOKEN'
     )
   }
+  if (!channelId) {
+    throw new Error(
+      'Missing input slack-channel-id or environment variable SLACK_CHANNEL_ID'
+    )
+  }
 
   if (slackTs) {
-    core.saveState('slack-ts', slackTs)
-  } else if (channelId) {
-    core.info(JSON.stringify({ context, env: process.env }, null, 2))
-    const repoName = `${context.repo.owner}/${context.repo.repo}`
-    const repoBaseURL = `https://github.com/${repoName}`
-    const info = [{ label: 'Repo', url: repoBaseURL, value: repoName }, {
-      label: 'Workflow',
-      url: `${repoBaseURL}/actions/runs/${context.runId}`,
-      value: context.workflow
-    }, {
-      label: 'Author',
-      url: `https://github.com/${context.actor}`,
-      value: context.actor
-    }]
-    if (context.payload.pull_request?.html_url) {
-      info.push({
-        label: 'PR',
-        url: context.payload.pull_request.html_url,
-        value: `#${context.payload.pull_request.number}`
+    const { mainBlock, threadBlock, jobLabel } = await getJobsStatusBlock(
+      octokit,
+      context
+    )
+    const [mainMessage, threadMessage] = await Promise.all([
+      slack.chat.update({
+        channel: channelId,
+        ts: slackTs,
+        text: context.workflow,
+        blocks: [getInfoBlock(context), mainBlock]
+      }),
+      slack.chat.postMessage({
+        channel: channelId,
+        thread_ts: slackTs,
+        text: jobLabel,
+        unfurl_links: false,
+        blocks: [threadBlock]
       })
+    ])
+    if (!threadMessage.ts) {
+      throw new Error('did not get slack thread ts')
     }
-    // console.log(JSON.stringify(context, null, 2))
-    const response = await slack.chat.postMessage({
+    core.saveState('slack-ts', mainMessage.ts)
+    core.saveState('slack-thread-ts', threadMessage.ts)
+  } else {
+    const { mainBlock, threadBlock, jobLabel } = await getJobsStatusBlock(
+      octokit,
+      context
+    )
+    const mainMessage = await slack.chat.postMessage({
       channel: channelId,
-      text: `${context.workflow}`,
+      text: context.workflow,
       unfurl_links: false,
-      blocks: [{
-        block_id: 'info',
-        type: 'context',
-        elements: info.map(item => ({
-          type: 'mrkdwn',
-          text: `*${item.label}*     \n<${item.url}|${item.value}>     `
-        }))
-      }, {
-        block_id: 'jobs',
-        type: 'section',
-        text: {
-          type: 'mrkdwn',
-          text: await getJobsStatusText(octokit, context)
-        }
-      }]
+      blocks: [getInfoBlock(context), mainBlock]
     })
-    if (!response.ts) {
+    if (!mainMessage.ts) {
       throw new Error('Did not get slack ts')
     }
-    core.saveState('slack-ts', response.ts)
-  } else {
-    throw new Error(`missing input slack-ts or channel-id`)
+    const threadMessage = await slack.chat.postMessage({
+      channel: channelId,
+      thread_ts: mainMessage.ts,
+      text: jobLabel,
+      unfurl_links: false,
+      blocks: [threadBlock]
+    })
+    if (!threadMessage.ts) {
+      throw new Error('did not get slack thread ts')
+    }
+    core.saveState('slack-ts', mainMessage.ts)
+    core.saveState('slack-thread-ts', threadMessage.ts)
   }
-  core.saveState('start', Date.now())
-
-  // await octokit.rest.actions.getWorkflow({
-  //   ...context.repo,
-  //   // workflow_id: context.workflow
-  // })
 }
 
 run().catch(error => {
