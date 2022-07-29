@@ -67,7 +67,6 @@ export async function run () {
       text: `${context.workflow}`,
       unfurl_links: false,
       attachments: [{
-        preview: { can_remove: false },
         color: '#d4ad3c',
         blocks: [{
           block_id: 'info',
