@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
-import { context, getOctokit } from '@actions/github'
-import { WebClient } from '@slack/web-api'
+// import { context, getOctokit } from '@actions/github'
+// import { WebClient } from '@slack/web-api'
 import process from 'node:process'
 import util from 'node:util'
 
@@ -12,8 +12,8 @@ export async function run () {
   const slackTs = core.getInput('slack-ts')
   const githubToken = core.getInput('github-token', { required: true })
   const jobStatus = core.getInput('status', { required: true })
-  const octokit = getOctokit(githubToken)
-  const slack = new WebClient(slackToken)
+  // const octokit = getOctokit(githubToken)
+  // const slack = new WebClient(slackToken)
   core.notice(jobStatus)
 }
 
