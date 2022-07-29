@@ -43,6 +43,14 @@ export async function run () {
         )
       }
     )
+    const jobs2 = await octokit.paginate(
+      octokit.rest.actions.listJobsForWorkflowRun,
+      {
+        ...context.repo,
+        run_id: context.runId
+      }
+    )
+    console.log(JSON.stringify(jobs2, null, 2))
     const repoName = `${context.repo.owner}/${context.repo.repo}`
     const repoBaseURL = `https://github.com/${repoName}`
     const info = [{ label: 'Repo', url: repoBaseURL, value: repoName }, {
@@ -82,7 +90,8 @@ export async function run () {
             type: 'mrkdwn',
             text: jobs
               .map(job => {
-                return `<${job.check_run_url}|:tada:>`
+                job.status
+                return `<${job.html_url}|:tada: ${job.name}>`
               })
               .join(' --> ')
           }
@@ -93,7 +102,7 @@ export async function run () {
       throw new Error('Did not get slack ts')
     }
     core.saveState('slack-ts', response.ts)
-    console.log(JSON.stringify(jobs, null, 2))
+    // console.log(JSON.stringify(jobs, null, 2))
   } else {
     throw new Error(`missing input slack-ts or channel-id`)
   }
