@@ -17,6 +17,11 @@ export async function run () {
   const octokit = getOctokit(githubToken)
   const slack = new WebClient(slackToken)
   core.info(JSON.stringify({ context, env: process.env }, null, 2))
+  const run = await octokit.rest.actions.getWorkflowRun({
+    ...context.repo,
+    run_id: context.runId
+  })
+  core.info(JSON.stringify(run.data))
 
   // await octokit.rest.actions.getWorkflow({
   //   ...context.repo,
