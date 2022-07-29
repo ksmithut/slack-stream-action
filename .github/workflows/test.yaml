@@ -3,25 +3,16 @@ on:
   push:
     branches:
       - main
-env:
-  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-  SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
 
 jobs:
   test:
     name: First comes the tests
-    outputs:
-      slack-ts: ${{ steps.slack.outputs.slack-ts }}
     runs-on: ubuntu-latest
     steps:
-      - id: slack
-        uses: ksmithut/slack-stream-action@main
       - uses: actions/checkout@v3
   build:
     needs:
       - test
     runs-on: ubuntu-latest
     steps:
-      - uses: ksmithut/slack-stream-action@main
-        with:
-          slack-ts: ${{ needs.test.outputs.slack-ts }}
+      - run: echo 'hello'
