@@ -16,7 +16,7 @@ export async function run () {
   const jobStatus = core.getInput('status', { required: true })
   const octokit = getOctokit(githubToken)
   const slack = new WebClient(slackToken)
-  core.notice(jobStatus)
+  core.notice(`pre ${jobStatus}`)
 }
 
 run().catch(error => {
