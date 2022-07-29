@@ -36,7 +36,26 @@ export async function run () {
         )
       }
     )
-    core.info(JSON.stringify(jobs, null, 2))
+    const info = [{
+      label: 'Author',
+      url: `https://github.com/${context.actor}`,
+      value: context.actor
+    }]
+    if (context.payload.repository?.html_url) {
+      info.push({
+        label: 'Repo',
+        url: context.payload.repository.html_url,
+        value: context.payload.repository.name
+      })
+    }
+    if (context.payload.pull_request?.html_url) {
+      info.push({
+        label: 'PR',
+        url: context.payload.pull_request.html_url,
+        value: `#${context.payload.pull_request.number}`
+      })
+    }
+    console.log(JSON.stringify(context, null, 2))
   } else {
     throw new Error(`missing input slack-ts or channel-id`)
   }
