@@ -88,5 +88,9 @@ export async function run () {
 }
 
 run().catch(error => {
-  core.error(`ksmithut/slack-stream-action: ${util.format(error)}`)
+  core.error(
+    `ksmithut/slack-stream-action: ${
+      util.formatWithOptions({ depth: 3 }, error)
+    }`
+  )
 })

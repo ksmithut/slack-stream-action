@@ -1,9 +1,3 @@
-const EMOJI_MAP = {
-  'queued': 'pending',
-  'in_progress': 'running',
-  'completed':
-}
-
 /**
  * @param {ReturnType<import('@actions/github').getOctokit>} octokit
  * @param {typeof import('@actions/github').context} context
@@ -14,19 +8,18 @@ export async function getJobsStatusText (octokit, context) {
     {
       ...context.repo,
       run_id: context.runId,
-      attempt_number: Number.parseInt(
-        process.env.GITHUB_RUN_ATTEMPT || '1',
-        10
-      )
+      attempt_number: Number.parseInt(process.env.GITHUB_RUN_ATTEMPT || '1', 10)
     }
   )
-  return jobs.map(job => {
-    job.started_at
-    const emoji = getJobEmoji(job)
-    const completionTime = getCompletionTime(job)
-    const suffix = completionTime ? ` ${completionTime}` : ''
-    return `<${job.html_url}|:${emoji}: ${job.name}${suffix}>`
-  })
+  return jobs
+    .map(job => {
+      job.started_at
+      const emoji = getJobEmoji(job)
+      const completionTime = getCompletionTime(job)
+      const suffix = completionTime ? ` ${completionTime}` : ''
+      return `<${job.html_url}|:${emoji}: ${job.name}${suffix}>`
+    })
+    .join(' --> ')
 }
 
 /**
@@ -40,11 +33,12 @@ function getJobEmoji (job) {
     if (job.conclusion === 'failure') return 'slack-stream-failure'
     if (job.conclusion === 'cancelled') return 'slack-stream-cancelled'
   }
-  throw new Error(`unknown status: ${job.status}, conclusion: ${job.conclusion}`)
+  throw new Error(
+    `unknown status: ${job.status}, conclusion: ${job.conclusion}`
+  )
 }
 
 /**
- *
  * @param {{ completed_at: string?, started_at: string }} job
  */
 function getCompletionTime (job) {
