@@ -22,7 +22,7 @@ export async function getJobsStatusBlock (octokit, context) {
   }
   const job = jobs.find(job => job.node_id === context.job)
   if (!job) {
-    core.info(JSON.stringify({ jobs, context }, null, 2))
+    core.info(JSON.stringify({ jobs, context, env: process.env }, null, 2))
     throw new Error('could not find job')
   }
   const threadBlock = {
