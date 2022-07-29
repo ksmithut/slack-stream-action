@@ -18,7 +18,7 @@ export async function run () {
   const slack = new WebClient(slackToken)
   core.info(JSON.stringify({ context, env: process.env }, null, 2))
   core.setOutput('slack-ts', 'foobar!')
-  core.notice(`slack-ts: ${process.env.SLACK_TS} or ${slackTs}`)
+  core.info(JSON.stringify({ slackTs }))
   const jobs = await octokit.paginate(
     octokit.rest.actions.listJobsForWorkflowRunAttempt,
     {
@@ -27,7 +27,7 @@ export async function run () {
       attempt_number: Number.parseInt(process.env.GITHUB_RUN_ATTEMPT || '1', 10)
     }
   )
-  core.info(JSON.stringify(jobs, null, 2))
+  // core.info(JSON.stringify(jobs, null, 2))
 
   // await octokit.rest.actions.getWorkflow({
   //   ...context.repo,
