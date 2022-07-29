@@ -22140,12 +22140,12 @@ var require_dist4 = __commonJS({
   }
 });
 
-// src/pre.js
-var pre_exports = {};
-__export(pre_exports, {
+// src/post.js
+var post_exports = {};
+__export(post_exports, {
   run: () => run
 });
-module.exports = __toCommonJS(pre_exports);
+module.exports = __toCommonJS(post_exports);
 var core = __toESM(require_core(), 1);
 var import_github = __toESM(require_github(), 1);
 var import_web_api = __toESM(require_dist4(), 1);
