@@ -67,6 +67,7 @@ export async function run () {
       text: `${context.workflow}`,
       unfurl_links: false,
       attachments: [{
+        preview: { can_remove: false },
         color: '#d4ad3c',
         blocks: [{
           block_id: 'info',
@@ -75,6 +76,17 @@ export async function run () {
             type: 'mrkdwn',
             text: `*${item.label}*     \n<${item.url}|${item.value}>     `
           }))
+        }, {
+          block_id: 'jobs',
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: jobs
+              .map(job => {
+                return `<${job.check_run_url}|:tada:>`
+              })
+              .join(' --> ')
+          }
         }]
       }]
     })
