@@ -1,1 +1,1 @@
-import{c as s,e as c}from"./chunk-7AQBY6L3.js";var t=s(c(),1);t.info(`slack-ts: ${t.getInput("slack-ts")}`);t.setOutput("slack-ts","main");
+import{c as o,e as s}from"./chunk-UJFNRH2W.js";var t=o(s(),1);t.info(`slack-ts: ${t.getInput("slack-ts")}`);t.setOutput("slack-ts","main");
