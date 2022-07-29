@@ -16,7 +16,6 @@ export async function run () {
   const jobStatus = core.getInput('status', { required: true })
   const octokit = getOctokit(githubToken)
   const slack = new WebClient(slackToken)
-  core.notice(`post ${jobStatus}`)
 }
 
 run().catch(error => {
