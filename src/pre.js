@@ -21,7 +21,7 @@ export async function run () {
     ...context.repo,
     run_id: context.runId
   })
-  core.info(JSON.stringify(run.data))
+  core.info(JSON.stringify(run.data, null, 2))
 
   // await octokit.rest.actions.getWorkflow({
   //   ...context.repo,
