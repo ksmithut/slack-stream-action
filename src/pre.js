@@ -17,15 +17,8 @@ export async function run () {
   const octokit = getOctokit(githubToken)
   const slack = new WebClient(slackToken)
   core.info(JSON.stringify({ context, env: process.env }, null, 2))
-  const runResponse = await octokit.rest.actions.getWorkflowRun({
-    ...context.repo,
-    run_id: context.runId
-  })
-  const workflowResponse = await octokit.rest.repos.getContent({
-    ...context.repo,
-    path: runResponse.data.path,
-    ref: context.ref
-  })
+  core.setOutput('slack-ts', 'foobar!')
+  core.notice(`slack-ts: ${process.env.SLACK_TS}`)
   const jobs = await octokit.paginate(
     octokit.rest.actions.listJobsForWorkflowRunAttempt,
     {
