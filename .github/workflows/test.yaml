@@ -16,7 +16,7 @@ jobs:
       - id: slack
         uses: ksmithut/slack-stream-action@main
         with:
-          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
       - uses: actions/checkout@v3
   build:
     needs:

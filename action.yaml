@@ -9,7 +9,7 @@ inputs:
   slack-bot-token:
     description: The slack app bot token to use when making API calls against the Slack API
     required: false
-  channel-id:
+  slack-channel-id:
     description: The channel id of the channel to post messages to
     required: false
   slack-ts:
