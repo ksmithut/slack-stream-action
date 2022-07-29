@@ -7,30 +7,39 @@ import process from 'node:process'
 import util from 'node:util'
 
 export async function run () {
-  core.info(`slack-ts: ${core.getInput('slack-ts')}`)
-  core.setOutput('slack-ts', 'pre')
-  core.saveState('testing', 'test1')
-  // const slackToken = core.getInput('slack-bot-token') ||
-  //   process.env.SLACK_BOT_TOKEN
-  // const channelId = core.getInput('slack-channel-id') ||
-  //   process.env.SLACK_CHANNEL_ID
-  // const slackTs = core.getInput('slack-ts')
-  // const githubToken = core.getInput('github-token', { required: true })
-  // const jobStatus = core.getInput('status', { required: true })
-  // const octokit = getOctokit(githubToken)
-  // const slack = new WebClient(slackToken)
-  // core.info(JSON.stringify({ context, env: process.env }, null, 2))
-  // core.setOutput('slack-ts', 'foobar')
-  // core.info(JSON.stringify({ slackTs }))
-  // const jobs = await octokit.paginate(
-  //   octokit.rest.actions.listJobsForWorkflowRunAttempt,
-  //   {
-  //     ...context.repo,
-  //     run_id: context.runId,
-  //     attempt_number: Number.parseInt(process.env.GITHUB_RUN_ATTEMPT || '1', 10)
-  //   }
-  // )
-  // core.info(JSON.stringify(jobs, null, 2))
+  const slackToken = core.getInput('slack-bot-token') ||
+    process.env.SLACK_BOT_TOKEN
+  const slackTs = core.getInput('slack-ts')
+  const channelId = core.getInput('slack-channel-id')
+  const jobStatus = core.getInput('status', { required: true })
+  const githubToken = core.getInput('github-token', { required: true })
+
+  const octokit = getOctokit(githubToken)
+  const slack = new WebClient(slackToken)
+
+  if (!slackToken) {
+    throw new Error(
+      'Missing input slack-bot-token or environment variable SLACK_BOT_TOKEN'
+    )
+  }
+
+  if (slackTs) {
+  } else if (channelId) {
+    const jobs = await octokit.paginate(
+      octokit.rest.actions.listJobsForWorkflowRunAttempt,
+      {
+        ...context.repo,
+        run_id: context.runId,
+        attempt_number: Number.parseInt(
+          process.env.GITHUB_RUN_ATTEMPT || '1',
+          10
+        )
+      }
+    )
+    core.info(JSON.stringify(jobs, null, 2))
+  } else {
+    throw new Error(`missing input slack-ts or channel-id`)
+  }
 
   // await octokit.rest.actions.getWorkflow({
   //   ...context.repo,
