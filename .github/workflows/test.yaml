@@ -4,6 +4,8 @@ on:
     branches:
       - main
 
+slack-stream: true
+
 jobs:
   test:
     name: First comes the tests
