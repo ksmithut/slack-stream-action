@@ -4,11 +4,10 @@ on:
     branches:
       - main
 
+env:
+  SLACK_STREAM: true
+
 jobs:
-  slack-stream:
-    if: ${{ false }}
-    runs-on: ubuntu-latest
-    steps: [{ run: 'exit 1' }]
   test:
     name: First comes the tests
     runs-on: ubuntu-latest
