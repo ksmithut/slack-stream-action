@@ -1,5 +1,6 @@
 name: Test
 on:
+  slack-stream:
   push:
     branches:
       - main
