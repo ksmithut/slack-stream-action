@@ -6,6 +6,9 @@ on:
 
 jobs:
   slack-stream:
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps: []
   test:
     name: First comes the tests
     runs-on: ubuntu-latest
