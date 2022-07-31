@@ -1,13 +1,11 @@
 name: Test
 on:
-  slack-stream:
   push:
     branches:
       - main
 
-slack-stream: true
-
 jobs:
+  slack-stream:
   test:
     name: First comes the tests
     runs-on: ubuntu-latest
