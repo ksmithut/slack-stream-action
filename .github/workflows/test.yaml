@@ -9,10 +9,15 @@ env:
 
 jobs:
   test:
-    name: First comes the tests
+    name: Run with node ${{ matrix.version }}
+    strategy:
+      matrix:
+        version: [10, 12, 14]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
   build:
     needs:
       - test
