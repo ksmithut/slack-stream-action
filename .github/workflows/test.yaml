@@ -5,7 +5,7 @@ on:
       - main
 
 env:
-  SLACK_STREAM: true
+  SLACK_STREAM: false
 
 jobs:
   test:
